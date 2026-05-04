@@ -1,0 +1,21 @@
+{
+  "name": "ShadowPay App",
+  "short_name": "ShadowPay",
+  "description": "ShadowPay Sales Notification Generator",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#a855f7",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/a855f7/ffffff?text=S",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/a855f7/ffffff?text=S",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
