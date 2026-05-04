@@ -3,274 +3,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ShadowPay - Dashboard Pro</title>
+    <title>ShadowPay</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#09090b">
+    <meta name="theme-color" content="#000000">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .glow-button { box-shadow: 0 0 15px rgba(168, 85, 247, 0.3); }
-        .glow-button:hover { box-shadow: 0 0 25px rgba(168, 85, 247, 0.5); }
-        body { background: radial-gradient(circle at top, #1a0b2e 0%, #09090b 60%); min-height: 100vh; overscroll-behavior: none; }
+        /* Tipografia de sistema nativo e remoção de firulas */
+        body { 
+            background-color: #000000; /* Fundo 100% preto real */
+            -webkit-tap-highlight-color: transparent; 
+            overscroll-behavior: none;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        /* Cores exatas de gateways minimalistas */
+        .card-bg { background-color: #111111; }
+        .icon-bg { background-color: #1a1a1c; }
+        .input-bg { background-color: #111111; }
+        .text-label { color: #8E8E93; }
+        
         ::-webkit-scrollbar { display: none; }
-        .glass-card { background: rgba(24, 24, 27, 0.8); backdrop-blur-xl; border: 1px border white/5; }
-        /* Animação para o Toast */
-        @keyframes toastSlideIn { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes toastSlideOut { from { transform: translateY(0); opacity: 1; } to { transform: translateY(100%); opacity: 0; } }
-        .toast-enter { animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .toast-exit { animation: toastSlideOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        /* Animação do Toast rodapé */
+        .toast-show { transform: translateY(0%); }
+        .toast-hide { transform: translateY(100%); }
     </style>
 </head>
-<body class="text-zinc-100 font-sans selection:bg-purple-500 selection:text-white pb-20 overflow-x-hidden">
+<body class="text-white antialiased pb-10 overflow-x-hidden">
 
-    <!-- Header Global Mobile Pro -->
-    <header class="fixed top-0 left-0 w-full glass-card h-16 z-50 flex items-center justify-between px-5 border-b border-white/5">
-        <div class="flex items-center gap-3">
-            <button onclick="toggleMenu()" class="text-zinc-500 hover:text-white p-2 -ml-2 rounded-lg transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-            <img src="https://i.postimg.cc/W1vZvNhS/Design-sem-nome-(12).png" alt="ShadowPay Logo" class="w-8 h-8 rounded-lg shadow-lg">
-            <h1 class="text-lg font-black tracking-tighter text-white italic">Shadow<span class="text-purple-500">Pay</span></h1>
-        </div>
+    <!-- Header Nativo Minimalista -->
+    <header class="flex items-center justify-between px-5 pt-8 pb-4">
+        <button onclick="toggleMenu()" class="text-white p-1 -ml-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
         <div class="flex items-center gap-2">
-            <button onclick="toggleSaldos()" id="btnHideSaldos" class="text-zinc-500 hover:text-white p-2 rounded-lg transition-colors">
-                <svg class="w-5 h-5" id="iconEyeOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                <svg class="w-5 h-5 hidden" id="iconEyeClosed" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"></path></svg>
-            </button>
+            <!-- Logo minimalista chapado -->
+            <img src="https://i.postimg.cc/W1vZvNhS/Design-sem-nome-(12).png" alt="ShadowPay" class="w-6 h-6 rounded">
+            <span class="text-white font-semibold text-[17px] tracking-tight">ShadowPay</span>
         </div>
+        <div class="w-6"></div> <!-- Spacer -->
     </header>
 
-    <!-- Menu Drawer Oculto -->
-    <div id="menuDrawer" class="fixed inset-0 z-40 transform translate-x-full transition-transform duration-300 ease-in-out">
-        <!-- Overlay -->
-        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="toggleMenu()"></div>
-        <!-- Painel -->
-        <div class="absolute top-0 left-0 w-[280px] h-full bg-zinc-950/90 backdrop-blur-2xl p-6 border-r border-white/5 flex flex-col pt-24 shadow-2xl">
-            <div class="space-y-3">
-                <button onclick="showPage('dashboard')" id="linkDashboard" class="w-full text-left p-4 rounded-xl flex items-center gap-3 bg-purple-600/10 text-purple-400 font-semibold text-sm">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
-                    Dashboard Pro
+    <!-- Menu Lateral (Drawer) Sólido -->
+    <div id="menuDrawer" class="fixed inset-0 z-40 transform -translate-x-full transition-transform duration-300 ease-in-out">
+        <div class="absolute inset-0 bg-black/60" onclick="toggleMenu()"></div>
+        <div class="absolute top-0 left-0 w-[280px] h-full bg-[#0a0a0a] border-r border-[#1a1a1c] p-6 flex flex-col pt-24 shadow-2xl">
+            <div class="space-y-2">
+                <button onclick="showPage('dashboard')" id="linkDashboard" class="w-full text-left p-4 rounded-xl flex items-center gap-3 bg-[#1a1a1c] text-white font-medium text-[15px]">
+                    <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    Detalhes (Dashboard)
                 </button>
-                <button onclick="showPage('generator')" id="linkGenerator" class="w-full text-left p-4 rounded-xl flex items-center gap-3 text-zinc-400 hover:bg-zinc-900 font-semibold text-sm transition-colors group">
-                    <svg class="w-5 h-5 text-zinc-500 group-hover:text-purple-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Geração de Push
+                <button onclick="showPage('generator')" id="linkGenerator" class="w-full text-left p-4 rounded-xl flex items-center gap-3 text-[#8E8E93] hover:bg-[#111111] font-medium text-[15px] transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Gerador de Vendas
                 </button>
             </div>
-            <p class="mt-auto text-center text-[10px] text-zinc-600 uppercase tracking-widest italic">ShadowPay Core v2.1</p>
+            <p class="mt-auto text-[11px] text-[#4a4a4a] uppercase tracking-widest font-semibold">ShadowPay Gateway</p>
         </div>
     </div>
 
-    <!-- Conteúdo Principal -->
-    <main class="pt-20 px-5 space-y-8">
-
-        <!-- PAGINA 1: DASHBOARD (Visível por Padrão) -->
-        <div id="pageDashboard" class="space-y-8">
+    <!-- MAIN CONTENT -->
+    <main>
+        
+        <!-- ================= PÁGINA 1: DASHBOARD ================= -->
+        <div id="pageDashboard" class="block">
             
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl font-bold tracking-tight text-zinc-100 flex items-center gap-1.5">
-                    <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2z"></path></svg>
-                    Resumo Mobile
-                </h2>
-                <div class="text-[10px] bg-emerald-500/10 text-emerald-400 font-bold px-2.5 py-1 rounded-full uppercase tracking-wider flex items-center gap-1">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Hoje
-                </div>
+            <!-- Título "Detalhes" e Botão Esconder Igual Gateway Real -->
+            <div class="px-5 mt-4 mb-6 flex items-center justify-between">
+                <h1 class="text-[28px] font-bold text-white tracking-tight">Detalhes</h1>
+                <button onclick="toggleSaldos()" class="text-white p-1">
+                    <!-- Ícone de Olho Cortado (Padrão) -->
+                    <svg id="iconEyeClosed" class="w-[22px] h-[22px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"></path></svg>
+                    <!-- Ícone de Olho Aberto -->
+                    <svg id="iconEyeOpen" class="w-[22px] h-[22px] hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                </button>
             </div>
 
-            <!-- Lista de Cards Estilo Gateway -->
-            <div class="space-y-4">
+            <!-- Lista de Cards UI Flat Minimalista -->
+            <div class="px-5 space-y-3 pb-20">
                 
-                <!-- Card Pro (Saldo Disponível) -->
-                <div class="glass-card p-6 rounded-2xl border border-white/5 flex items-start gap-4">
-                    <div class="flex-shrink-0 w-12 h-12 bg-purple-600/10 rounded-2xl flex items-center justify-center text-purple-400 border border-purple-500/20">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <!-- Card 1: Saldo Disponível -->
+                <div class="card-bg rounded-2xl p-4 flex items-center gap-4">
+                    <div class="w-[50px] h-[50px] shrink-0 icon-bg rounded-2xl flex items-center justify-center text-purple-500 font-medium text-2xl">
+                        $
                     </div>
-                    <div>
-                        <p class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">Saldo disponível</p>
-                        <p class="text-3xl font-extrabold text-white leading-none hide-value">R$ <span id="dashSaldoDisponivel">5.582,62</span></p>
-                        <p class="hidden text-3xl font-extrabold text-zinc-700 leading-none hide-placeholder">R$ ••••••••</p>
-                    </div>
-                </div>
-
-                <!-- Card Pro (Saldo Pendente) -->
-                <div class="glass-card p-6 rounded-2xl border border-white/5 flex items-start gap-4">
-                    <div class="flex-shrink-0 w-12 h-12 bg-zinc-950 rounded-2xl flex items-center justify-center text-amber-400 border border-zinc-800">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1 relative flex items-center gap-1.5">
-                            Saldo pendente
-                            <svg class="w-3 h-3 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </p>
-                        <p class="text-2xl font-extrabold text-amber-300 hide-value leading-none">R$ <span id="dashSaldoPendente">350,00</span></p>
-                        <p class="hidden text-2xl font-extrabold text-zinc-800 hide-placeholder leading-none">R$ ••••••••</p>
+                    <div class="flex flex-col justify-center">
+                        <span class="text-label text-[13px] font-medium mb-0.5">Saldo disponível</span>
+                        <span class="text-white text-[22px] font-bold leading-none tracking-tight hide-value">R$ <span id="dashSaldoDisponivel">5.582,62</span></span>
+                        <span class="text-white text-[22px] font-bold leading-none tracking-tight hide-placeholder hidden">R$ ••••••••</span>
                     </div>
                 </div>
 
-                <!-- Card Pro (Faturamento Bruto) -->
-                <div class="glass-card p-6 rounded-2xl border border-white/5 flex items-start gap-4">
-                    <div class="flex-shrink-0 w-12 h-12 bg-purple-600/10 text-purple-400 border border-purple-500/20 rounded-2xl flex items-center justify-center border">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <!-- Card 2: Saldo Pendente -->
+                <div class="card-bg rounded-2xl p-4 flex items-center gap-4">
+                    <div class="w-[50px] h-[50px] shrink-0 icon-bg rounded-2xl flex items-center justify-center text-purple-500 font-medium text-2xl">
+                        $
                     </div>
-                    <div>
-                        <p class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">Faturamento bruto</p>
-                        <p class="text-2xl font-extrabold text-zinc-400 hide-value leading-none">R$ <span id="dashBruto">5.932,62</span></p>
-                        <p class="hidden text-2xl font-extrabold text-zinc-800 hide-placeholder leading-none">R$ ••••••••</p>
-                    </div>
-                </div>
-
-                <!-- Card Pro (Faturamento Líquido Aprovadas) -->
-                <div class="glass-card p-6 rounded-2xl border border-white/5 flex items-start gap-4">
-                    <div class="flex-shrink-0 w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-400 border border-emerald-500/20">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1 relative flex items-center gap-1.5">
-                            Faturamento líquido <span class="text-emerald-500 font-black tracking-tighter text-[10px]">(+ Taxas Ocultas)</span>
-                        </p>
-                        <p class="text-2xl font-extrabold text-emerald-400 hide-value leading-none">R$ <span id="dashLiquido">5.582,62</span></p>
-                        <p class="hidden text-2xl font-extrabold text-zinc-800 hide-placeholder leading-none">R$ ••••••••</p>
+                    <div class="flex flex-col justify-center">
+                        <span class="text-label text-[13px] font-medium mb-0.5">Saldo pendente</span>
+                        <span class="text-white text-[22px] font-bold leading-none tracking-tight hide-value">R$ <span id="dashSaldoPendente">0,00</span></span>
+                        <span class="text-white text-[22px] font-bold leading-none tracking-tight hide-placeholder hidden">R$ ••••••••</span>
                     </div>
                 </div>
 
-                <!-- Card Pro (Quantidade de Vendas Aprovadas) -->
-                <div class="glass-card p-6 rounded-2xl border border-white/5 flex items-start gap-4">
-                    <div class="flex-shrink-0 w-12 h-12 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-2xl flex items-center justify-center border">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <!-- Card 3: Faturamento Bruto -->
+                <div class="card-bg rounded-2xl p-4 flex items-center gap-4">
+                    <div class="w-[50px] h-[50px] shrink-0 icon-bg rounded-2xl flex items-center justify-center text-purple-500 font-medium text-2xl">
+                        $
                     </div>
-                    <div>
-                        <p class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1 relative flex items-center gap-1.5">Vendas aprovadas</p>
-                        <p class="text-3xl font-extrabold text-whiteLEADING-NONE"><span id="dashQtyAprovadas">29</span></p>
-                    </div>
-                </div>
-
-                <!-- Card Pro (Quantidade de Vendas Pendentes) -->
-                <div class="glass-card p-6 rounded-2xl border border-white/5 flex items-start gap-4">
-                    <div class="flex-shrink-0 w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-400 border border-amber-500/20">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1 relative flex items-center gap-1.5">Leads pendentes</p>
-                        <p class="text-3xl font-extrabold text-amber-300 LEDING-NONE"><span id="dashQtyPendentes">12</span></p>
+                    <div class="flex flex-col justify-center">
+                        <span class="text-label text-[13px] font-medium mb-0.5">Faturamento bruto</span>
+                        <span class="text-white text-[22px] font-bold leading-none tracking-tight hide-value">R$ <span id="dashBruto">5.582,62</span></span>
+                        <span class="text-white text-[22px] font-bold leading-none tracking-tight hide-placeholder hidden">R$ ••••••••</span>
                     </div>
                 </div>
 
-                <!-- Mini-Gráfico e Conversão (Glass) -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Mini-Gráfico Área -->
-                    <div class="glass-card p-5 rounded-2xl border border-white/5 col-span-1 md:col-span-2 space-y-3 relative overflow-hidden group">
-                        <div class="flex items-center justify-between relative z-10">
-                            <p class="text-xs font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-1.5">
-                                <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
-                                Vendas hoje (Aprovadas)
-                            </p>
-                            <p class="text-[10px] text-zinc-600 font-medium italic group-hover:text-white transition-colors">Volatilidade Simulada</p>
-                        </div>
-                        <div class="w-full h-16 relative">
-                            <!-- SVG do Mini-Gráfico Área Roxo -->
-                            <svg id="dashMiniChart" viewBox="0 0 100 30" class="w-full h-full absolute inset-0 text-purple-600 opacity-60">
-                                <defs>
-                                    <linearGradient id="gradientChart" x1="0" x2="0" y1="0" y2="1">
-                                        <stop offset="0%" stop-color="currentColor" />
-                                        <stop offset="100%" stop-color="transparent" />
-                                    </linearGradient>
-                                </defs>
-                                <path id="chartArea" d="M0,28 L0,15 L10,12 L20,18 L30,10 L40,14 L50,8 L60,11 L70,5 L80,9 L90,2 L100,6 L100,28 Z" fill="url(#gradientChart)" />
-                                <path id="chartLine" d="M0,15 L10,12 L20,18 L30,10 L40,14 L50,8 L60,11 L70,5 L80,9 L90,2 L100,6" fill="none" stroke="currentColor" stroke-width="0.8" />
-                            </svg>
-                        </div>
+                <!-- Card 4: Faturamento Líquido -->
+                <div class="card-bg rounded-2xl p-4 flex items-center gap-4">
+                    <div class="w-[50px] h-[50px] shrink-0 icon-bg rounded-2xl flex items-center justify-center text-purple-500 font-medium text-2xl">
+                        $
                     </div>
-                    <!-- Mini-Card Conversão -->
-                    <div class="glass-card p-5 rounded-2xl border border-white/5 space-y-1 relative flex flex-col items-center justify-center">
-                        <div class="flex items-center gap-1.5 justify-center mb-1">
-                            <div class="w-4 h-4 bg-purple-600/10 rounded flex items-center justify-center border border-purple-500/20 text-purple-400">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2z"></path></svg>
-                            </div>
-                            <p class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Conversão Pro</p>
-                        </div>
-                        <p class="text-4xl font-extrabold text-purple-400leading-none text-center"><span id="dashConversao">57</span>%</p>
-                        <p class="text-[9px] text-zinc-700 mt-1 uppercase tracking-widest font-black">(Fixo Meta 57%)</p>
+                    <div class="flex flex-col justify-center">
+                        <span class="text-label text-[13px] font-medium mb-0.5">Faturamento líquido</span>
+                        <span class="text-white text-[22px] font-bold leading-none tracking-tight hide-value">R$ <span id="dashLiquido">5.582,62</span></span>
+                        <span class="text-white text-[22px] font-bold leading-none tracking-tight hide-placeholder hidden">R$ ••••••••</span>
+                    </div>
+                </div>
+
+                <!-- Card 5: Quantidade de Vendas -->
+                <div class="card-bg rounded-2xl p-4 flex items-center gap-4">
+                    <div class="w-[50px] h-[50px] shrink-0 icon-bg rounded-2xl flex items-center justify-center text-purple-500">
+                        <!-- Icone raio -->
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg>
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <span class="text-label text-[13px] font-medium mb-0.5">Quantidade de vendas</span>
+                        <span class="text-white text-[22px] font-bold leading-none tracking-tight"><span id="dashQtyAprovadas">29</span></span>
+                    </div>
+                </div>
+
+                <!-- Card 6: Leads Pendentes -->
+                <div class="card-bg rounded-2xl p-4 flex items-center gap-4">
+                    <div class="w-[50px] h-[50px] shrink-0 icon-bg rounded-2xl flex items-center justify-center text-purple-500 font-medium text-2xl">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <span class="text-label text-[13px] font-medium mb-0.5">Leads pendentes</span>
+                        <span class="text-white text-[22px] font-bold leading-none tracking-tight"><span id="dashQtyPendentes">0</span></span>
+                    </div>
+                </div>
+
+                <!-- Card 7: Taxa de Conversão -->
+                <div class="card-bg rounded-2xl p-4 flex items-center gap-4">
+                    <div class="w-[50px] h-[50px] shrink-0 icon-bg rounded-2xl flex items-center justify-center text-purple-500 font-medium text-2xl">
+                        %
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <span class="text-label text-[13px] font-medium mb-0.5">Taxa de conversão</span>
+                        <span class="text-white text-[22px] font-bold leading-none tracking-tight"><span id="dashConversao">57</span>%</span>
                     </div>
                 </div>
 
             </div>
-
-            <p class="text-center text-[10px] text-zinc-700 mt-12 uppercase tracking-[0.3em] font-black italic">ShadowPay © 2026 - Secure Simulation Core</p>
         </div>
 
-        <!-- PAGINA 2: GERADOR DE PUSH (Oculta por Padrão) -->
-        <div id="pageGenerator" class="hidden space-y-6">
-            
-            <div class="text-center flex flex-col items-center pt-8 mb-4">
-                <div class="flex items-center gap-3 mb-2">
-                    <img src="https://i.postimg.cc/W1vZvNhS/Design-sem-nome-(12).png" alt="ShadowPay Logo" class="w-10 h-10 rounded-xl shadow-[0_0_15px_rgba(168,85,247,0.4)] border border-purple-500/20">
-                    <h1 class="text-xl font-black tracking-tighter text-white italic">Shadow<span class="text-purple-500">Pay</span></h1>
-                </div>
-                <p class="text-zinc-500 text-[10px] uppercase tracking-[0.2em] font-bold">Simulator Core v2</p>
-            </div>
+        <!-- ================= PÁGINA 2: GERADOR DE VENDAS ================= -->
+        <div id="pageGenerator" class="hidden px-5">
+            <h1 class="text-[28px] font-bold text-white tracking-tight mt-4 mb-6">Automação</h1>
 
-            <button onclick="requestPermission()" id="permBtn" class="w-full mb-6 bg-zinc-950 hover:bg-zinc-800 text-zinc-400 font-semibold py-3 px-4 rounded-xl border border-zinc-800 transition-all text-xs flex items-center justify-center gap-2 group">
-                <svg class="w-4 h-4 text-zinc-500 group-hover:text-purple-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                <span id="permText">Conectar Push Nativo</span>
+            <button onclick="requestPermission()" id="permBtn" class="w-full mb-6 bg-[#111111] text-white font-medium py-4 px-4 rounded-2xl transition-all text-[15px] flex items-center justify-center gap-2">
+                <svg class="w-5 h-5 text-[#8E8E93]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                <span id="permText">Ativar Push Nativo</span>
             </button>
 
             <div class="space-y-6">
-                <!-- Valor da Venda -->
+                <!-- Configuração de Valor -->
                 <div>
-                    <label class="block text-[10px] font-bold text-zinc-500 uppercase mb-1.5 ml-1 tracking-wider">Valor Base (R$)</label>
-                    <div class="relative flex items-center">
-                        <svg class="w-4 h-4 text-zinc-600 absolute left-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <input type="text" id="saleValue" value="97,00" class="w-full bg-zinc-950/50 border border-zinc-800 rounded-xl pl-10 pr-4 py-3 text-zinc-200 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all text-sm font-medium placeholder:text-zinc-700">
-                    </div>
+                    <label class="block text-label text-[13px] font-medium mb-2 ml-1">Valor do Produto (R$)</label>
+                    <input type="text" id="saleValue" value="97,00" class="w-full input-bg border-none rounded-2xl px-4 py-4 text-white focus:outline-none focus:ring-1 focus:ring-purple-500 transition-all text-[15px] font-medium placeholder-[#4a4a4a]">
                 </div>
 
-                <div class="w-full h-px bg-zinc-800/50"></div>
+                <div class="w-full h-px bg-[#1a1a1c]"></div>
 
-                <!-- Controles Manuais -->
+                <!-- Robô Principal -->
                 <div>
-                    <label class="block text-[10px] font-bold text-purple-400 uppercase mb-3 ml-1 tracking-wider flex items-center gap-1">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
-                        Disparo Manual Pro (Não Afeta a Taxa Fixa)
-                    </label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <button onclick="triggerManual('pendente')" class="bg-zinc-800 hover:bg-zinc-700 text-amber-400 font-bold py-3 rounded-xl border border-zinc-700 transition-all text-[10px] uppercase tracking-wide flex items-center justify-center gap-1.5 group">
-                            <svg class="w-4 h-4 text-amber-600 group-hover:text-amber-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            Pendente
-                        </button>
-                        <button onclick="triggerManual('aprovada')" class="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 font-bold py-3 rounded-xl border border-emerald-500/30 transition-all text-[10px] uppercase tracking-wide flex items-center justify-center gap-1.5 group">
-                            <svg class="w-4 h-4 text-emerald-600 group-hover:text-emerald-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                            Aprovada
-                        </button>
-                    </div>
-                </div>
-
-                <div class="w-full h-px bg-zinc-800/50"></div>
-
-                <!-- Automação em Massa -->
-                <div>
-                    <label class="block text-[10px] font-bold text-purple-400 uppercase mb-3 ml-1 tracking-wider flex items-center gap-1 relative">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                        Robô de Automação (Conversão Real 57%)
-                        <span class="absolute right-0 top-0 text-[8px] bg-purple-500 text-white font-black px-1.5 py-0.5 rounded-sm">Lógica Premium Ativa</span>
-                    </label>
+                    <label class="block text-white text-[15px] font-semibold mb-3 ml-1">Robô Real de Leads (Meta 57%)</label>
                     
-                    <div class="flex gap-2 items-center mb-4">
-                        <input type="number" id="autoQty" value="1" min="1" class="w-16 bg-zinc-950 border border-zinc-800 rounded-xl px-2 py-2.5 text-zinc-200 text-center text-sm focus:outline-none focus:border-purple-500">
-                        <span class="text-xs font-semibold text-zinc-500 uppercase tracking-widest">por</span>
-                        <select id="autoUnit" class="flex-1 bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2.5 text-zinc-200 text-sm focus:outline-none focus:border-purple-500 appearance-none text-left">
+                    <div class="flex gap-3 items-center mb-4">
+                        <input type="number" id="autoQty" value="1" min="1" class="w-20 input-bg border-none rounded-2xl px-3 py-4 text-white text-center text-[15px] focus:outline-none">
+                        <span class="text-label text-[13px] font-medium">por</span>
+                        <select id="autoUnit" class="flex-1 input-bg border-none rounded-2xl px-4 py-4 text-white text-[15px] focus:outline-none appearance-none">
                             <option value="1000">Segundo</option>
                             <option value="60000">Minuto</option>
                         </select>
                     </div>
 
-                    <div class="grid grid-cols-1" id="actionButtons">
-                        <button onclick="startAuto()" id="btnStart" class="bg-purple-600 hover:bg-purple-500 text-white font-black py-4 rounded-xl glow-button transition-all text-[11px] uppercase tracking-widest flex items-center justify-center gap-1.5 w-full active:scale-95">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132A1 1 0 0015 14.133v-4.266a1 1 0 00-.248-.699z"></path></svg>
-                            Iniciar Robô de Leads
+                    <button onclick="startAuto()" id="btnStart" class="bg-purple-600 active:bg-purple-700 text-white font-semibold py-4 rounded-2xl transition-colors text-[15px] flex items-center justify-center gap-2 w-full">
+                        Iniciar Robô
+                    </button>
+                    
+                    <button onclick="stopAuto()" id="btnStop" class="hidden bg-[#2a1111] text-red-500 font-semibold py-4 rounded-2xl transition-colors text-[15px] flex items-center justify-center w-full">
+                        Parar Robô
+                    </button>
+                </div>
+
+                <div class="w-full h-px bg-[#1a1a1c]"></div>
+
+                <!-- Disparos Manuais (Opcional) -->
+                <div>
+                    <label class="block text-label text-[13px] font-medium mb-3 ml-1">Disparo Manual Avulso</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="triggerManual('pendente')" class="bg-[#1a1a1c] active:bg-[#222] text-[#8E8E93] font-medium py-3.5 rounded-2xl transition-colors text-[14px]">
+                            Gerar Pendente
                         </button>
-                        
-                        <button onclick="stopAuto()" id="btnStop" class="hidden bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 font-black py-4 rounded-xl transition-all text-[11px] uppercase tracking-widest flex items-center justify-center gap-1.5 w-full active:scale-95">
-                            <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"></path></svg>
-                            Parar Robô de Leads
+                        <button onclick="triggerManual('aprovada')" class="bg-[#1a1a1c] active:bg-[#222] text-white font-medium py-3.5 rounded-2xl transition-colors text-[14px]">
+                            Gerar Aprovada
                         </button>
                     </div>
                 </div>
@@ -278,31 +225,29 @@
         </div>
     </main>
 
-    <!-- Áudio de Caixa Registradora -->
-    <audio id="cashSound" src="https://www.myinstants.com/media/sounds/ca-ching.mp3" preload="auto"></audio>
-
-    <!-- Toast de Sucesso Rodapé (Como na Imagem) -->
-    <div id="updateToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 glass-card bg-emerald-500/10 p-3 px-5 rounded-2xl border border-emerald-500/30 shadow-xl z-50 flex items-center gap-2 hidden toast-exit">
-        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        <span class="text-xs font-semibold text-emerald-400">Dados atualizados com sucesso!</span>
+    <!-- Toast Barra Inferior 100% Nativo -->
+    <div id="updateToast" class="fixed bottom-0 left-0 w-full bg-[#1c1c1e] px-5 py-[18px] text-white text-[14px] font-medium transition-transform duration-300 ease-in-out z-50 toast-hide">
+        Dados atualizados com sucesso!
     </div>
+
+    <!-- Áudio nativo do Cash -->
+    <audio id="cashSound" src="https://www.myinstants.com/media/sounds/ca-ching.mp3" preload="auto"></audio>
 
     <script>
         if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 
         const logoUrl = 'https://i.postimg.cc/W1vZvNhS/Design-sem-nome-(12).png';
         let robotInterval = null;
-        const conversaoFixaMeta = 57; // 57%
+        const conversaoFixaMeta = 57; 
 
-        // Estado Inicial Pro Mobile (Simulando Vendas já ocorridas)
+        // Valores Iniciais
         const initialState = {
             disponivel: 5582.62,
-            pendente: 350.00,
+            pendente: 0.00,
             aprovadasQty: 29,
-            pendentesQty: 12
+            pendentesQty: 0
         };
 
-        // Verifica permissão ao carregar
         window.onload = () => {
             initializeDashboard();
             if (Notification.permission === 'granted') setPermissionGranted();
@@ -317,37 +262,36 @@
             showUpdateToast();
         }
 
-        // Navegação de Páginas
+        // Navegação
         function showPage(pageName) {
-            const dashboardLink = document.getElementById('linkDashboard');
-            const generatorLink = document.getElementById('linkGenerator');
-            const drawerLinks = document.querySelectorAll('#menuDrawer button');
-
-            // Remove classes ativas de todos os links do drawer
-            drawerLinks.forEach(link => {
-                link.classList.remove('bg-purple-600/10', 'text-purple-400');
-                link.classList.add('text-zinc-400');
-            });
+            const linkDash = document.getElementById('linkDashboard');
+            const linkGen = document.getElementById('linkGenerator');
 
             if (pageName === 'dashboard') {
-                document.getElementById('pageDashboard').classList.remove('hidden');
-                document.getElementById('pageGenerator').classList.add('hidden');
-                dashboardLink.classList.add('bg-purple-600/10', 'text-purple-400');
-                dashboardLink.classList.remove('text-zinc-400');
+                document.getElementById('pageDashboard').style.display = 'block';
+                document.getElementById('pageGenerator').style.display = 'none';
+                
+                linkDash.className = "w-full text-left p-4 rounded-xl flex items-center gap-3 bg-[#1a1a1c] text-white font-medium text-[15px]";
+                linkGen.className = "w-full text-left p-4 rounded-xl flex items-center gap-3 text-[#8E8E93] hover:bg-[#111111] font-medium text-[15px] transition-colors";
+                
                 showUpdateToast();
             } else {
-                document.getElementById('pageDashboard').classList.add('hidden');
-                document.getElementById('pageGenerator').classList.remove('hidden');
-                generatorLink.classList.add('bg-purple-600/10', 'text-purple-400');
-                generatorLink.classList.remove('text-zinc-400');
+                document.getElementById('pageDashboard').style.display = 'none';
+                document.getElementById('pageGenerator').style.display = 'block';
+                
+                linkDash.className = "w-full text-left p-4 rounded-xl flex items-center gap-3 text-[#8E8E93] hover:bg-[#111111] font-medium text-[15px] transition-colors";
+                linkGen.className = "w-full text-left p-4 rounded-xl flex items-center gap-3 bg-[#1a1a1c] text-white font-medium text-[15px]";
             }
-            toggleMenu(); // Fecha o menu
+            toggleMenu(); 
         }
 
         function toggleMenu() {
             const drawer = document.getElementById('menuDrawer');
-            drawer.classList.toggle('translate-x-full');
-            drawer.classList.toggle('translate-x-0');
+            if (drawer.classList.contains('-translate-x-full')) {
+                drawer.classList.remove('-translate-x-full');
+            } else {
+                drawer.classList.add('-translate-x-full');
+            }
         }
 
         function toggleSaldos() {
@@ -358,42 +302,34 @@
 
             openEye.classList.toggle('hidden');
             closedEye.classList.toggle('hidden');
-
             hiddenValues.forEach(val => val.classList.toggle('hidden'));
             placeholders.forEach(val => val.classList.toggle('hidden'));
         }
 
         function showUpdateToast() {
             const toast = document.getElementById('updateToast');
-            toast.classList.remove('hidden', 'toast-exit');
-            toast.classList.add('toast-enter');
+            toast.classList.remove('toast-hide');
+            toast.classList.add('toast-show');
             setTimeout(() => {
-                toast.classList.remove('toast-enter');
-                toast.classList.add('toast-exit');
-                setTimeout(() => toast.classList.add('hidden'), 300);
-            }, 3000);
+                toast.classList.remove('toast-show');
+                toast.classList.add('toast-hide');
+            }, 2500); // Fica na tela por 2.5s igual app real
         }
 
-        // --- Funções Auxiliares de Atualização da Dashboard ---
-
+        // Funções de Update de Valores
         function setDashboardValue(id, value, isInteger = false) {
             const el = document.getElementById(id);
             if (isInteger) {
                 el.innerText = Math.round(value);
             } else {
-                // Formatação Real R$ X.XXX,XX
                 el.innerText = value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             }
         }
 
         function getDashboardValue(id, isInteger = false) {
             const elText = document.getElementById(id).innerText;
-            if (isInteger) {
-                return parseInt(elText) || 0;
-            } else {
-                // Converte format real R$ X.XXX,XX de volta para número
-                return parseFloat(elText.replace('R$ ', '').replace('.', '').replace(',', '.')) || 0;
-            }
+            if (isInteger) return parseInt(elText) || 0;
+            return parseFloat(elText.replace('R$ ', '').replace(/\./g, '').replace(',', '.')) || 0;
         }
 
         function updateDashboardBrutoLiquido() {
@@ -401,7 +337,7 @@
             const pendente = getDashboardValue('dashSaldoPendente');
             
             const bruto = disponivel + pendente;
-            const liquido = disponivel; // Liquido simulado das aprovadas
+            const liquido = disponivel; // Líquido = Aprovadas
 
             setDashboardValue('dashBruto', bruto);
             setDashboardValue('dashLiquido', liquido);
@@ -413,9 +349,7 @@
             
             setDashboardValue('dashSaldoPendente', currentPendente + val);
             setDashboardValue('dashQtyPendentes', currentQtyPendentes + 1, true);
-            
             updateDashboardBrutoLiquido();
-            updateChartStyle(); // Flutuação do Gráfico
         }
 
         function addApprovedDashboard(val, fromPending = false) {
@@ -425,71 +359,40 @@
             setDashboardValue('dashSaldoDisponivel', currentDisponivel + val);
             setDashboardValue('dashQtyAprovadas', currentQtyAprovadas + 1, true);
 
-            // Se aprovou uma que era pendente, subtrai dos pendentes
             if (fromPending) {
                 let currentPendente = getDashboardValue('dashSaldoPendente');
                 let currentQtyPendentes = getDashboardValue('dashQtyPendentes', true);
                 
-                setDashboardValue('dashSaldoPendente', Math.max(0, currentPendente - val)); // Evita negativo
-                setDashboardValue('dashQtyPendentes', Math.max(0, currentQtyPendentes - 1), true); // Evita negativo
+                setDashboardValue('dashSaldoPendente', Math.max(0, currentPendente - val)); 
+                setDashboardValue('dashQtyPendentes', Math.max(0, currentQtyPendentes - 1), true); 
             }
-            
             updateDashboardBrutoLiquido();
-            updateChartStyle(); // Flutuação do Gráfico
         }
 
-        // Flutuação Simulada do Gráfico de Área (Roxo)
-        function updateChartStyle() {
-            const area = document.getElementById('chartArea');
-            const line = document.getElementById('chartLine');
-            // Gera 12 pontos de Y aleatórios (entre 5 e 25) para parecer atividade
-            const points = Array.from({length: 12}, () => Math.floor(Math.random() * (25 - 5 + 1)) + 5);
-            
-            let dLine = `M0,${points[0]}`;
-            let dArea = `M0,28 L0,${points[0]}`;
-            
-            for(let i = 1; i < 12; i++) {
-                const x = i * 10 - 5; // Ajuste X para o viewBox 100x30
-                dLine += ` L${x},${points[i]}`;
-                dArea += ` L${x},${points[i]}`;
-            }
-            dArea += ` L100,28 Z`; // Fecha a área
-            
-            area.setAttribute('d', dArea);
-            line.setAttribute('d', dLine);
-        }
-
-        // --- Funções Centrais de Geração de Notificações e Leads ---
-
+        // Permissões e Push
         function setPermissionGranted() {
             const btn = document.getElementById('permBtn');
-            btn.className = "w-full mb-6 bg-emerald-500/10 text-emerald-400 font-semibold py-3 px-4 rounded-xl border border-emerald-500/30 flex items-center justify-center gap-2 group";
-            btn.innerHTML = `
-                <svg class="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span class="text-xs">Push Sincronizado</span>
-            `;
+            const text = document.getElementById('permText');
+            btn.className = "w-full mb-6 bg-[#1a1a1c] text-white font-medium py-4 px-4 rounded-2xl transition-all text-[15px] flex items-center justify-center gap-2";
+            text.innerText = "Push Sincronizado";
         }
 
         function requestPermission() {
             if (!("Notification" in window)) {
-                alert("Seu navegador não suporta push nativo.");
+                alert("Navegador não suporta push nativo.");
                 return;
             }
             Notification.requestPermission().then(permission => {
                 if (permission === 'granted') setPermissionGranted();
-                else alert("Permissão negada. Autorize no navegador.");
             });
         }
 
         function playAudio() {
             const audio = document.getElementById('cashSound');
             audio.currentTime = 0;
-            audio.play().catch(e => console.log("Áudio bloqueado até interação."));
+            audio.play().catch(e => console.log("Áudio pendente de interação."));
         }
 
-        // Função de envio de push genérica
         function sendPush(title, value) {
             if (Notification.permission === 'granted') {
                 navigator.serviceWorker.ready.then(reg => {
@@ -497,45 +400,36 @@
                         body: `Valor: R$ ${value}`,
                         icon: logoUrl,
                         badge: logoUrl,
-                        vibrate: [200, 100, 200],
-                        requireInteraction: false
+                        vibrate: [200, 100, 200]
                     });
                 });
                 playAudio(); 
-            } else {
-                alert("Conecte o sistema nativo (botão 1) primeiro.");
             }
         }
 
-        // --- Funções de Leads e Conversão (Core da Lógica) ---
+        // --- Core: Lógica de 57% Real ---
+        function generateLeadWithConversionRule(valStr, valNum) {
+            // 1. Gera notificação Pendente real e atualiza saldo
+            sendPush('Venda Pendente', valStr);
+            addPendingDashboard(valNum);
 
-        // Função que gera UM "Lead" (Venda Pendente) que PODE aprovar depois
-        function generateLeadWithConversionRule(val) {
-            // 1. Gera notificação de Pendente imediatamente
-            sendPush('Venda Pendente', val);
-            addPendingDashboard(val); // Atualiza Dashboard
-
-            // 2. Rola o dado de conversão (Número aleatório 0-100)
+            // 2. Rola o dado para taxa de conversão (0 a 100)
             const dado = Math.random() * 100;
 
-            // 3. Verifica se o lead converterá (<=57)
+            // 3. Se estiver dentro dos 57%, o Lead converte
             if (dado <= conversaoFixaMeta) {
-                // Converterá! Define um atraso aleatório (lead gerando e comprando)
-                // Atraso entre 60 e 180 seg (1-3 min)
+                // Atraso de lead real: entre 60s (1 min) e 180s (3 min)
                 const delayMs = Math.floor(Math.random() * (180000 - 60000 + 1)) + 60000;
                 
-                // Agenda a aprovação desse lead específico
                 setTimeout(() => {
-                    sendPush('Venda Aprovada', val);
-                    addApprovedDashboard(val, true); // Atualiza Dashboard, subtraindo dos pendentes
+                    sendPush('Venda Aprovada', valStr);
+                    addApprovedDashboard(valNum, true); // Abate do saldo pendente
                 }, delayMs);
             }
-            // Se o dado for >57, o lead não converte, permanece pendente para sempre.
+            // Se cair nos outros 43%, o lead só gera pendente e fica no sistema pra sempre.
         }
 
-        // Disparo Manual (Botões) - Não afeta a taxa de conversão do robô
         function triggerManual(type) {
-            // Formatação do valor (R$ XXX,XX)
             let val = document.getElementById('saleValue').value.replace('R$ ', '').replace(',', '.');
             let valNum = parseFloat(val) || 97.00;
             let valFormatted = valNum.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -543,43 +437,39 @@
             if (type === 'pendente') {
                 sendPush('Venda Pendente', valFormatted);
                 addPendingDashboard(valNum);
-                // NOTA: Disparos manuais de pendente NÃO convertem para não adulterar a taxa fixa de 57% do robô.
             } else {
                 sendPush('Venda Aprovada', valFormatted);
-                addApprovedDashboard(valNum); // Adiciona direto às aprovadas
+                addApprovedDashboard(valNum); 
             }
         }
 
-        // --- Automação em Massa (Robô Pro) ---
-
         function startAuto() {
             if (Notification.permission !== 'granted') {
-                alert("Conecte o sistema nativo primeiro!");
+                alert("Ative o push nativo primeiro!");
                 return;
             }
 
             const qty = parseInt(document.getElementById('autoQty').value) || 1;
-            const timeUnit = parseInt(document.getElementById('autoUnit').value); // 1000 = Seg, 60000 = Min
+            const timeUnit = parseInt(document.getElementById('autoUnit').value); 
+            
             let valText = document.getElementById('saleValue').value.replace('R$ ', '').replace(',', '.');
             let valNum = parseFloat(valText) || 97.00;
             let valFormatted = valNum.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-            // Calcula o tempo de intervalo. Ex: 2 por segundo = a cada 500ms
             const intervalMs = timeUnit / qty;
 
-            document.getElementById('btnStart').classList.add('hidden');
-            document.getElementById('btnStop').classList.remove('hidden');
+            document.getElementById('btnStart').style.display = 'none';
+            document.getElementById('btnStop').style.display = 'flex';
 
-            // Inicia o loop que gera "Leads" (Pendente -> Conversão)
             robotInterval = setInterval(() => {
-                generateLeadWithConversionRule(valFormatted);
+                generateLeadWithConversionRule(valFormatted, valNum);
             }, intervalMs);
         }
 
         function stopAuto() {
             clearInterval(robotInterval);
-            document.getElementById('btnStart').classList.remove('hidden');
-            document.getElementById('btnStop').classList.add('hidden');
+            document.getElementById('btnStart').style.display = 'flex';
+            document.getElementById('btnStop').style.display = 'none';
         }
     </script>
 </body>
