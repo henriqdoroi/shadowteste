@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shadowpay-v1';
+const CACHE_NAME = 'shadow-v2';
 const assets = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
