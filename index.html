@@ -242,9 +242,9 @@
 
         // Valores Iniciais
         const initialState = {
-            disponivel: 5582.62,
+            disponivel: 0.00,
             pendente: 0.00,
-            aprovadasQty: 29,
+            aprovadasQty: 0,
             pendentesQty: 0
         };
 
@@ -417,9 +417,15 @@
             const dado = Math.random() * 100;
 
             // 3. Se estiver dentro dos 57%, o Lead converte
-            if (dado <= conversaoFixaMeta) {
-                // Atraso de lead real: entre 60s (1 min) e 180s (3 min)
-                const delayMs = Math.floor(Math.random() * (180000 - 60000 + 1)) + 60000;
+if (dado <= conversaoFixaMeta) {
+    // Atraso de lead real fixado em 30 segundos (30000 ms)
+    const delayMs = 30000;
+    
+    setTimeout(() => {
+        sendPush('Venda Aprovada', valStr);
+        addApprovedDashboard(valNum, true); // Abate do saldo pendente na dashboard
+    }, delayMs);
+}
                 
                 setTimeout(() => {
                     sendPush('Venda Aprovada', valStr);
